@@ -44,6 +44,13 @@ python -m http.server 8000 --directory web
 
 service worker ทำงานบน `localhost` และ `https` เท่านั้น
 
+## Deploy
+
+repo นี้เชื่อมกับ Vercel ไว้แล้ว (Root Directory: `web`)
+
+- merge เข้า `main` แล้วเว็บจริงจะ deploy ให้เอง
+- ทุก Pull Request จะได้ลิงก์ preview ของตัวเอง ลองเปิดดูก่อน merge ได้
+
 ## ร่วมพัฒนา
 
 ยินดีรับ Pull Request ครับ อ่านรายละเอียดได้ที่ [CONTRIBUTING.md](CONTRIBUTING.md)
