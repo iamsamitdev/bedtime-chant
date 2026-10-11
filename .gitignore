@@ -1,0 +1,7 @@
+# local only
+.claude/
+.vercel/
+.env*
+*.bak
+# Claude artifact build (uses Claude-only runtime APIs)
+bedtime-chant.html

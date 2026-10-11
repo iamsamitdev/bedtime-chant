@@ -1,0 +1,931 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#11131d">
+<meta name="description" content="บทสวดมนต์ก่อนนอน อิติปิโส ธัมมจักฯ พาหุง ชินบัญชร เลื่อนตัวอักษรอัตโนมัติ พร้อมบันทึกสวดต่อเนื่อง ๙๐ คืน">
+<title>บทสวดก่อนนอน</title>
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" type="image/png" href="/icons/favicon.png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="สวดก่อนนอน">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600&family=Noto+Serif+Thai:wght@400;500;600&display=swap">
+<style>
+html, body { margin: 0; }
+body { font-size: 14px; }
+/* Layout: one quiet reading column, sticky tabs on top, a thumb-reach control bar at the bottom; text drifts upward on its own. */
+:root {
+  --bg: #11131d;        /* night indigo */
+  --surface: #191c2a;
+  --line: #2a2e42;
+  --fg: #e8e1cf;        /* candlelight paper */
+  --muted: #8f8ca3;
+  --accent: #d6a65c;    /* saffron gold */
+  --accent-ink: #1a1408;
+  --hl: rgba(214, 166, 92, .30);
+  --font-chant: "Noto Serif Thai", "Sarabun", "Leelawadee UI", Tahoma, serif;
+  --font-ui: "Anuphan", "Leelawadee UI", Tahoma, system-ui, sans-serif;
+  --size: 24px;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #f2f0ea; --surface: #e8e5dc; --line: #d6d1c4;
+    --fg: #1f1d1a; --muted: #6c675d; --accent: #95601a; --accent-ink: #fff8ec; --hl: rgba(149, 96, 26, .18);
+    color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --bg: #f2f0ea; --surface: #e8e5dc; --line: #d6d1c4;
+  --fg: #1f1d1a; --muted: #6c675d; --accent: #95601a; --accent-ink: #fff8ec; --hl: rgba(149, 96, 26, .18);
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html, body { background: var(--bg); }
+body { color: var(--fg); font-family: var(--font-ui); -webkit-tap-highlight-color: transparent; }
+
+header {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5;
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line);
+  padding: 10px 16px 0;
+}
+.brand { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.brand h1 { margin: 0; font-size: 15px; font-weight: 600; letter-spacing: .02em; }
+.brand span { font-size: 12px; color: var(--muted); }
+.brand #hint { margin-left: auto; }
+.install { border: 1px solid var(--accent); background: none; color: var(--accent); border-radius: 999px; padding: 4px 12px; font: 500 12px var(--font-ui); cursor: pointer; flex: 0 0 auto; }
+.install:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.tabs { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; margin-top: 8px; }
+.tabs::-webkit-scrollbar { display: none; }
+.tab {
+  flex: 0 0 auto; border: 0; background: none; color: var(--muted);
+  font: 500 14px var(--font-ui); padding: 8px 12px 10px; cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+.tab[aria-selected="true"] { color: var(--fg); border-bottom-color: var(--accent); }
+.progress { height: 2px; background: var(--accent); width: 0; transform-origin: left; margin: 0 -16px; opacity: .7; }
+
+main { padding-inline: 16px; padding-block: 28vh 70vh; }
+.reader { max-width: 34em; margin: 0 auto; font-family: var(--font-chant); font-size: var(--size); line-height: 1.85; }
+.chant + .chant { margin-top: 3.2em; }
+.chant h2 {
+  font-size: .82em; font-weight: 600; color: var(--accent); margin: 0 0 .2em;
+  text-wrap: balance; line-height: 1.4;
+}
+.chant .sub { font-family: var(--font-ui); font-size: 13px; color: var(--muted); margin: 0 0 1.6em; letter-spacing: .02em; }
+.note { font-family: var(--font-ui); font-size: .58em; color: var(--muted); margin: 1.4em 0 .4em; letter-spacing: .03em; }
+.stanza { display: grid; grid-template-columns: 1.6em 1fr; gap: 0 .4em; margin: 0 0 1.1em; }
+.stanza .n { font-size: .6em; color: var(--muted); padding-top: .55em; font-variant-numeric: tabular-nums; }
+.stanza .lines { min-width: 0; }
+.stanza .lines div { text-indent: -1em; padding-left: 1em; }
+.stanza .lines .r { color: var(--muted); }
+.prose { margin: 0 0 1em; text-wrap: pretty; text-indent: 1.5em; }
+.end { text-align: center; color: var(--accent); font-size: .9em; margin-top: 2.4em; letter-spacing: .1em; }
+
+.bar {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 6;
+  padding: 10px 16px calc(10px + env(safe-area-inset-bottom, 0px));
+  background: color-mix(in srgb, var(--surface) 94%, transparent);
+  backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  border-top: 1px solid var(--line);
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  transition: opacity .6s ease;
+}
+body.playing .bar { opacity: .35; }
+body.playing .bar:hover, body.playing .bar:focus-within { opacity: 1; }
+.group { display: flex; align-items: center; gap: 4px; }
+.btn {
+  border: 1px solid var(--line); background: var(--bg); color: var(--fg);
+  width: 40px; height: 40px; border-radius: 10px; display: grid; place-items: center;
+  font: 600 14px var(--font-ui); cursor: pointer; padding: 0;
+}
+.btn svg { width: 20px; height: 20px; fill: currentColor; }
+.btn:focus-visible, .tab:focus-visible, .play:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.play {
+  width: 58px; height: 58px; border-radius: 50%; border: 0; cursor: pointer;
+  background: var(--accent); color: var(--accent-ink); display: grid; place-items: center;
+}
+.play svg { width: 26px; height: 26px; fill: currentColor; }
+.lvl { min-width: 2.2em; text-align: center; font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; line-height: 1.1; }
+.lvl b { display: block; color: var(--fg); font-size: 15px; }
+.btn[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+@media (max-width: 400px) { .bar { gap: 6px; } .group { gap: 3px; } .btn { width: 32px; height: 32px; border-radius: 9px; } .btn svg { width: 18px; height: 18px; } .play { width: 48px; height: 48px; } .lvl { min-width: 1.8em; font-size: 12px; } }
+/* ---- karaoke highlight ---- */
+::highlight(sung) { color: var(--accent); }
+/* ---- tap counter ---- */
+.counter { position: fixed; right: 16px; bottom: calc(96px + env(safe-area-inset-bottom, 0px)); z-index: 7; width: 68px; height: 68px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface); color: var(--fg); box-shadow: 0 6px 18px rgba(0, 0, 0, .28); display: grid; place-items: center; font-family: var(--font-ui); cursor: pointer; padding: 0; user-select: none; -webkit-user-select: none; touch-action: manipulation; }
+.counter .ci { display: flex; flex-direction: column; align-items: center; gap: 3px; }
+.counter b { font-size: 22px; font-weight: 600; line-height: 1; font-variant-numeric: tabular-nums; }
+.counter .of { font-size: 11px; color: var(--muted); line-height: 1; }
+.counter.done { border-color: var(--accent); }
+.counter.done b { color: var(--accent); }
+.counter.pop { animation: cpop .18s ease-out; }
+@keyframes cpop { 50% { transform: scale(.9); } }
+.counter:focus-visible, .counter-reset:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.counter-reset { position: fixed; right: 94px; bottom: calc(114px + env(safe-area-inset-bottom, 0px)); z-index: 7; height: 32px; padding: 0 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--muted); font: 500 12px var(--font-ui); cursor: pointer; }
+.counter-reset.armed { color: var(--accent); border-color: var(--accent); }
+body.logview .counter, body.logview .counter-reset { display: none; }
+@media (max-width: 400px) { .counter { bottom: calc(84px + env(safe-area-inset-bottom, 0px)); width: 62px; height: 62px; } .counter-reset { right: 88px; bottom: calc(99px + env(safe-area-inset-bottom, 0px)); } }
+@media (prefers-reduced-motion: reduce) { .counter.pop { animation: none; } }
+/* ---- about ---- */
+.about { max-width: 30rem; margin: 0 auto; display: grid; gap: 16px; font-family: var(--font-ui); }
+.about .who { display: flex; gap: 16px; align-items: center; }
+.about .who img { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; flex: 0 0 auto; border: 2px solid var(--accent); background: var(--surface); }
+.about .who > div { min-width: 0; }
+.about h2 { margin: 0; font-size: 20px; font-weight: 600; text-wrap: balance; }
+.about .en { color: var(--muted); font-size: 13px; margin: 2px 0 6px; letter-spacing: .02em; }
+.about .role { font-size: 14px; color: var(--accent); margin: 0; }
+.about p { margin: 0; font-size: 15px; line-height: 1.7; }
+.about .facts { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.about .facts div { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 8px; text-align: center; min-width: 0; }
+.about .facts b { display: block; font-size: 20px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.about .facts span { font-size: 12px; color: var(--muted); }
+.about .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.about .tags span { font-size: 12px; border: 1px solid var(--line); border-radius: 999px; padding: 4px 10px; color: var(--fg); }
+.about .links { display: grid; gap: 8px; }
+.about a.link { display: block; text-align: center; text-decoration: none; border-radius: 10px; padding: 12px 16px; font: 600 15px var(--font-ui); border: 1px solid var(--accent); color: var(--accent); }
+.about a.link.primary { background: var(--accent); color: var(--accent-ink); }
+.about a.link:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.about .small { font-size: 13px; color: var(--muted); }
+/* ---- rounds ---- */
+.rounds { font-family: var(--font-ui); display: flex; flex-wrap: nowrap; align-items: center; gap: 6px; margin: -0.6em 0 1.8em; font-size: 14px; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding-bottom: 2px; }
+.rounds::-webkit-scrollbar { display: none; }
+.rounds > * { flex: 0 0 auto; }
+.rounds .rl { white-space: nowrap; }
+.rounds .rl { color: var(--muted); font-size: 13px; margin-right: 4px; }
+.rounds .val { min-width: 2.6em; text-align: center; font-size: 16px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.rbtn { border: 1px solid var(--line); background: var(--surface); color: var(--fg); min-width: 34px; height: 34px; border-radius: 9px; font: 600 16px var(--font-ui); cursor: pointer; padding: 0 8px; }
+.rbtn.pre { font-weight: 500; font-size: 13px; }
+.rbtn[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.rbtn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.rounds .gap { width: 6px; }
+.round { font-family: var(--font-ui); font-size: 13px; color: var(--accent); letter-spacing: .05em; margin: 1.8em 0 .9em; display: flex; align-items: center; gap: 10px; }
+.round::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+.round.silent { height: 0; margin: 0; overflow: hidden; }
+.round.silent::after { display: none; }
+.brand .roundnow { margin-left: auto; color: var(--accent); font-weight: 600; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.brand .roundnow:not([hidden]) ~ #hint { display: none; }
+/* ---- journal ---- */
+body.logview .bar, body.logview #hint, body.logview .progress { display: none; }
+body.logview main { padding-block: 20px 48px; }
+.jr { max-width: 30rem; margin: 0 auto; display: grid; gap: 16px; font-family: var(--font-ui); }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 16px; }
+.card h2 { margin: 0 0 6px; font-size: 18px; font-weight: 600; text-wrap: balance; }
+.jhead { display: flex; gap: 16px; align-items: center; }
+.ring { flex: 0 0 auto; width: 96px; height: 96px; position: relative; }
+.ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.ring .track { fill: none; stroke: var(--line); stroke-width: 8; }
+.ring .val { fill: none; stroke: var(--accent); stroke-width: 8; stroke-linecap: round; transition: stroke-dashoffset .6s ease; }
+.ring .num { position: absolute; inset: 0; display: grid; place-items: center; text-align: center; line-height: 1.05; }
+.ring .num b { font-size: 26px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.ring .num span { display: block; font-size: 11px; color: var(--muted); }
+.jhead .txt { min-width: 0; }
+.jhead h2 { margin: 0 0 4px; font-size: 18px; font-weight: 600; text-wrap: balance; }
+.muted { color: var(--muted); font-size: 13px; line-height: 1.55; margin: 0; }
+.gap { margin-bottom: 12px; }
+.lbl { font-size: 12px; color: var(--muted); letter-spacing: .04em; margin-bottom: 10px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+.chip { border: 1px solid var(--line); background: var(--bg); color: var(--fg); border-radius: 999px; padding: 8px 14px; font: 500 14px var(--font-ui); cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.chip:focus-visible, .jbtn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.donebadge { display: inline-block; font-size: 12px; color: var(--accent); margin-left: 6px; }
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+.stat { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 12px 8px; text-align: center; min-width: 0; }
+.stat b { display: block; font-size: 20px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.stat span { font-size: 12px; color: var(--muted); }
+.cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+.cal .wd { font-size: 11px; color: var(--muted); text-align: center; padding-bottom: 2px; }
+.cell { aspect-ratio: 1; max-width: 100%; border-radius: 7px; display: grid; place-items: center; text-align: center; font-size: 11px; line-height: 1.1; font-variant-numeric: tabular-nums; color: var(--muted); border: 1px solid transparent; }
+.cell.future { background: var(--line); opacity: .35; }
+.cell.miss { border-color: var(--line); }
+.cell.done { background: var(--accent); color: var(--accent-ink); font-weight: 600; }
+.cell.today { box-shadow: 0 0 0 2px var(--fg) inset; color: var(--fg); }
+.cell.done.today { color: var(--accent-ink); }
+.cell.pad { visibility: hidden; }
+.cell .m { font-size: 9px; display: block; }
+.legend { display: flex; flex-wrap: wrap; gap: 14px; font-size: 12px; color: var(--muted); margin-top: 12px; }
+.legend i { display: inline-block; width: 12px; height: 12px; border-radius: 4px; vertical-align: -2px; margin-right: 5px; }
+.lg-done { background: var(--accent); }
+.lg-miss { border: 1px solid var(--line); }
+.lg-today { box-shadow: 0 0 0 2px var(--fg) inset; }
+.jbtn { border: 1px solid var(--line); background: var(--bg); color: var(--fg); border-radius: 10px; padding: 10px 14px; font: 500 14px var(--font-ui); cursor: pointer; }
+.jbtn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-weight: 600; }
+.jbtn.wide { width: 100%; padding: 12px 16px; }
+.jbtn.warn { color: var(--accent); }
+.row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.toast { position: fixed; left: 50%; bottom: calc(176px + env(safe-area-inset-bottom, 0px)); transform: translate(-50%, 12px); background: var(--fg); color: var(--bg); font: 500 14px var(--font-ui); padding: 10px 16px; border-radius: 999px; opacity: 0; pointer-events: none; transition: opacity .3s, transform .3s; z-index: 9; max-width: calc(100% - 32px); text-align: center; }
+.toast.show { opacity: 1; transform: translate(-50%, 0); }
+</style>
+</head>
+<body>
+<header>
+  <div class="brand"><h1>บทสวดก่อนนอน</h1><span class="roundnow" id="roundNow" hidden></span><span id="hint">แตะที่ตัวอักษรเพื่อเริ่ม/หยุด</span><button class="install" id="install" hidden>ติดตั้งแอป</button></div>
+  <nav class="tabs" role="tablist" id="tabs"></nav>
+  <div class="progress" id="progress"></div>
+</header>
+
+<main id="main"><div class="reader" id="reader"></div></main>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<button class="counter" id="counter" aria-label="นับรอบ แตะเพื่อเพิ่ม"><span class="ci"><b id="cNum">๐</b><span class="of" id="cOf">รอบ</span></span></button>
+<button class="counter-reset" id="counterReset" hidden>ล้าง</button>
+
+<div class="bar">
+  <div class="group" aria-label="ความเร็ว">
+    <button class="btn" id="slower" aria-label="ช้าลง"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="2" rx="1"/></svg></button>
+    <div class="lvl"><b id="speedVal">4</b>เร็ว</div>
+    <button class="btn" id="faster" aria-label="เร็วขึ้น"><svg viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="2" rx="1"/><rect x="11" y="5" width="2" height="14" rx="1"/></svg></button>
+    <button class="btn" id="hlToggle" aria-pressed="false" aria-label="ไฮไลต์ตามจังหวะอ่าน" title="ไฮไลต์ตามจังหวะอ่าน"><svg viewBox="0 0 24 24"><path d="M14.6 3.6l5.8 5.8-8.9 8.9H5.7v-5.8z"/><rect x="3" y="20" width="18" height="2" rx="1"/></svg></button>
+  </div>
+  <button class="play" id="play" aria-label="เริ่มเลื่อนอัตโนมัติ"><svg viewBox="0 0 24 24" id="playIcon"><path d="M8 5.5v13l11-6.5z"/></svg></button>
+  <div class="group">
+    <button class="btn" id="smaller" aria-label="ตัวอักษรเล็กลง">ก-</button>
+    <button class="btn" id="bigger" aria-label="ตัวอักษรใหญ่ขึ้น">ก+</button>
+    <button class="btn" id="theme" aria-label="สลับโหมดมืด/สว่าง"><svg viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg></button>
+    <button class="btn" id="top" aria-label="กลับไปต้นบท"><svg viewBox="0 0 24 24"><path d="M12 5l-7 7h4.5v7h5v-7H19z"/></svg></button>
+  </div>
+</div>
+
+<script>
+const R = 'ตันเตชะสา ภะวะตุ เต ชะยะมังคะลานิ';
+const U = 'ปุพเพ อะนะนุสสุเตสุ ธัมเมสุ จักขุง อุทะปาทิ ญาณัง อุทะปาทิ ปัญญา อุทะปาทิ วิชชา อุทะปาทิ อาโลโก อุทะปาทิ.';
+const MID = 'มัชฌิมา ปะฏิปะทา ตะถาคะเตนะ อะภิสัมพุทธา จักขุกะระณี ญาณะกะระณี อุปะสะมายะ อะภิญญายะ สัมโพธายะ นิพพานายะ สังวัตตะติ.';
+const PATH = 'อะยะเมวะ อะริโย อัฏฐังคิโก มัคโค. เสยยะถีทัง. สัมมาทิฏฐิ สัมมาสังกัปโป สัมมาวาจา สัมมากัมมันโต สัมมาอาชีโว สัมมาวายาโม สัมมาสะติ สัมมาสะมาธิ.';
+const ETAM = 'เอตัมภะคะวะตา พาราณะสิยัง อิสิปะตะเน มิคะทาเย อะนุตตะรัง ธัมมะจักกัง ปะวัตติตัง อัปปะฏิวัตติยัง สะมะเณนะ วา พราหมะเณนะ วา เทเวนะ วา มาเรนะ วา พรัหมุนา วา เกนะจิ วา โลกัสมินติ.';
+const WORLD = 'สะเทวะเก โลเก สะมาระเก สะพรัหมะเก สัสสะมะณะพราหมะณิยา ปะชายะ สะเทวะมะนุสสายะ อะนุตตะรัง สัมมาสัมโพธิง อะภิสัมพุทโธ ปัจจัญญาสิง.';
+
+const truths = [
+  ['ทุกขัง', 'ปะริญเญยยันติ', 'ปะริญญาตันติ'],
+  ['ทุกขะสะมุทะโย', 'ปะหาตัพพันติ', 'ปะหีนันติ'],
+  ['ทุกขะนิโรโธ', 'สัจฉิกาตัพพันติ', 'สัจฉิกะตันติ'],
+  ['ทุกขะนิโรธะคามินี ปะฏิปะทา', 'ภาเวตัพพันติ', 'ภาวิตันติ'],
+];
+// [realm, genitive]; opt = chanted in parentheses in some books
+const gods = [
+  ['จาตุมมะหาราชิกา', 'จาตุมมะหาราชิกานัง'], ['ตาวะติงสา', 'ตาวะติงสานัง'], ['ยามา', 'ยามานัง'], ['ตุสิตา', 'ตุสิตานัง'],
+  ['นิมมานะระตี', 'นิมมานะระตีนัง'], ['ปะระนิมมิตะวะสะวัตตี', 'ปะระนิมมิตะวะสะวัตตีนัง'], ['พรัหมะปาริสัชชา', 'พรัหมะปาริสัชชานัง'],
+  ['พรัหมะปุโรหิตา', 'พรัหมะปุโรหิตานัง'], ['มะหาพรัหมา', 'มะหาพรัหมานัง'], ['ปะริตตาภา', 'ปะริตตาภานัง'],
+  ['อัปปะมาณาภา', 'อัปปะมาณาภานัง'], ['อาภัสสะรา', 'อาภัสสะรานัง'], ['ปะริตตะสุภา', 'ปะริตตะสุภานัง'],
+  ['อัปปะมาณะสุภา', 'อัปปะมาณะสุภานัง'], ['สุภะกิณหะกา', 'สุภะกิณหะกานัง'], ['อะสัญญิสัตตา', 'อะสัญญิสัตตานัง', 'opt'],
+  ['เวหัปผะลา', 'เวหัปผะลานัง'], ['อะวิหา', 'อะวิหานัง'], ['อะตัปปา', 'อะตัปปานัง'], ['สุทัสสา', 'สุทัสสานัง'],
+  ['สุทัสสี', 'สุทัสสีนัง'], ['อะกะนิฏฐะกา'],
+];
+
+const CHANTS = [
+  {
+    id: 'itipiso', tab: 'อิติปิโส',
+    title: 'บทสวดอิติปิโส',
+    sub: 'พุทธคุณ ธรรมคุณ สังฆคุณ ระลึกถึงคุณพระรัตนตรัย',
+    blocks: [
+      { note: 'พุทธคุณ' },
+      { p: 'อิติปิ โส ภะคะวา อะระหัง สัมมาสัมพุทโธ วิชชาจะระณะสัมปันโน สุคะโต โลกะวิทู อะนุตตะโร ปุริสะทัมมะสาระถิ สัตถา เทวะมะนุสสานัง พุทโธ ภะคะวาติ.' },
+      { note: 'ธรรมคุณ' },
+      { p: 'สวากขาโต ภะคะวะตา ธัมโม สันทิฏฐิโก อะกาลิโก เอหิปัสสิโก โอปะนะยิโก ปัจจัตตัง เวทิตัพโพ วิญญูหีติ.' },
+      { note: 'สังฆคุณ' },
+      { p: 'สุปะฏิปันโน ภะคะวะโต สาวะกะสังโฆ อุชุปะฏิปันโน ภะคะวะโต สาวะกะสังโฆ ญายะปะฏิปันโน ภะคะวะโต สาวะกะสังโฆ สามีจิปะฏิปันโน ภะคะวะโต สาวะกะสังโฆ ยะทิทัง จัตตาริ ปุริสะยุคานิ อัฏฐะ ปุริสะปุคคะลา เอสะ ภะคะวะโต สาวะกะสังโฆ อาหุเนยโย ปาหุเนยโย ทักขิเณยโย อัญชะลีกะระณีโย อะนุตตะรัง ปุญญักเขตตัง โลกัสสาติ.' },
+    ],
+  },
+  {
+    id: 'dhamma', tab: 'ธัมมจักฯ',
+    title: 'ธัมมจักกัปปวัตตนสูตร',
+    sub: 'พระสูตรแรกที่พระพุทธองค์ทรงแสดง ณ ป่าอิสิปตนมฤคทายวัน',
+    blocks: [
+      { note: 'บทขัด' },
+      { lines: [
+        'อะนุตตะรัง อะภิสัมโพธิง สัมพุชฌิตวา ตะถาคะโต',
+        'ปะฐะมัง ยัง อะเทเสสิ ธัมมะจักกัง อะนุตตะรัง',
+        'สัมมะเทวะ ปะวัตเตนโต โลเก อัปปะฏิวัตติยัง',
+        'ยัตถากขาตา อุโภ อันตา ปะฏิปัตติ จะ มัชฌิมา',
+        'จะตูสวาริยะสัจเจสุ วิสุทธัง ญาณะทัสสะนัง',
+        'เทสิตัง ธัมมะราเชนะ สัมมาสัมโพธิกิตตะนัง',
+        'นาเมนะ วิสสุตัง สุตตัง ธัมมะจักกัปปะวัตตะนัง',
+        'เวยยากะระณะปาเฐนะ สังคีตันตัมภะณามะ เส.',
+      ] },
+      { note: 'ธัมมะจักกัปปะวัตตะนะสุตตัง' },
+      { p: 'เอวัมเม สุตัง. เอกัง สะมะยัง ภะคะวา พาราณะสิยัง วิหะระติ อิสิปะตะเน มิคะทาเย. ตัตระ โข ภะคะวา ปัญจะวัคคิเย ภิกขู อามันเตสิ.' },
+      { p: 'เทวเม ภิกขะเว อันตา ปัพพะชิเตนะ นะ เสวิตัพพา. โย จายัง กาเมสุ กามะสุขัลลิกานุโยโค หีโน คัมโม โปถุชชะนิโก อะนะริโย อะนัตถะสัญหิโต. โย จายัง อัตตะกิละมะถานุโยโค ทุกโข อะนะริโย อะนัตถะสัญหิโต.' },
+      { p: 'เอเต เต ภิกขะเว อุโภ อันเต อะนุปะคัมมะ ' + MID },
+      { p: 'กะตะมา จะ สา ภิกขะเว ' + MID },
+      { p: PATH },
+      { p: 'อะยัง โข สา ภิกขะเว ' + MID },
+      { p: 'อิทัง โข ปะนะ ภิกขะเว ทุกขัง อะริยะสัจจัง. ชาติปิ ทุกขา ชะราปิ ทุกขา มะระณัมปิ ทุกขัง โสกะปะริเทวะทุกขะโทมะนัสสุปายาสาปิ ทุกขา อัปปิเยหิ สัมปะโยโค ทุกโข ปิเยหิ วิปปะโยโค ทุกโข ยัมปิจฉัง นะ ละภะติ ตัมปิ ทุกขัง สังขิตเตนะ ปัญจุปาทานักขันธา ทุกขา.' },
+      { p: 'อิทัง โข ปะนะ ภิกขะเว ทุกขะสะมุทะโย อะริยะสัจจัง. ยายัง ตัณหา โปโนพภะวิกา นันทิราคะสะหะคะตา ตัตระ ตัตราภินันทินี. เสยยะถีทัง. กามะตัณหา ภะวะตัณหา วิภะวะตัณหา.' },
+      { p: 'อิทัง โข ปะนะ ภิกขะเว ทุกขะนิโรโธ อะริยะสัจจัง. โย ตัสสาเยวะ ตัณหายะ อะเสสะวิราคะนิโรโธ จาโค ปะฏินิสสัคโค มุตติ อะนาละโย.' },
+      { p: 'อิทัง โข ปะนะ ภิกขะเว ทุกขะนิโรธะคามินี ปะฏิปะทา อะริยะสัจจัง.' },
+      { p: PATH },
+      ...truths.flatMap(([t, a, b]) => [
+        { p: `อิทัง ${t} อะริยะสัจจันติ เม ภิกขะเว ${U}` },
+        { p: `ตัง โข ปะนิทัง ${t} อะริยะสัจจัง ${a} เม ภิกขะเว ${U}` },
+        { p: `ตัง โข ปะนิทัง ${t} อะริยะสัจจัง ${b} เม ภิกขะเว ${U}` },
+      ]),
+      { p: 'ยาวะกีวัญจะ เม ภิกขะเว อิเมสุ จะตูสุ อะริยะสัจเจสุ เอวันติปะริวัฏฏัง ทวาทะสาการัง ยะถาภูตัง ญาณะทัสสะนัง นะ สุวิสุทธัง อะโหสิ.' },
+      { p: 'เนวะ ตาวาหัง ภิกขะเว ' + WORLD },
+      { p: 'ยะโต จะ โข เม ภิกขะเว อิเมสุ จะตูสุ อะริยะสัจเจสุ เอวันติปะริวัฏฏัง ทวาทะสาการัง ยะถาภูตัง ญาณะทัสสะนัง สุวิสุทธัง อะโหสิ.' },
+      { p: 'อะถาหัง ภิกขะเว ' + WORLD },
+      { p: 'ญาณัญจะ ปะนะ เม ทัสสะนัง อุทะปาทิ. อะกุปปา เม วิมุตติ. อะยะมันติมา ชาติ. นัตถิทานิ ปุนัพภะโวติ.' },
+      { p: 'อิทะมะโวจะ ภะคะวา. อัตตะมะนา ปัญจะวัคคิยา ภิกขู ภะคะวะโต ภาสิตัง อะภินันทุง. อิมัสมิญจะ ปะนะ เวยยากะระณัสมิง ภัญญะมาเน อายัสมะโต โกณฑัญญัสสะ วิระชัง วีตะมะลัง ธัมมะจักขุง อุทะปาทิ. ยังกิญจิ สะมุทะยะธัมมัง สัพพันตัง นิโรธะธัมมันติ.' },
+      { p: 'ปะวัตติเต จะ ภะคะวะตา ธัมมะจักเก ภุมมา เทวา สัททะมะนุสสาเวสุง. ' + ETAM },
+      { p: 'ภุมมานัง เทวานัง สัททัง สุตวา' },
+      ...gods.map(([n, g, opt]) => {
+        const t = `${n} เทวา สัททะมะนุสสาเวสุง.` + (g ? ` ${g} เทวานัง สัททัง สุตวา` : '');
+        return { p: opt ? `(${t})` : t };
+      }),
+      { p: ETAM },
+      { p: 'อิติหะ เตนะ ขะเณนะ เตนะ มุหุตเตนะ ยาวะ พรัหมะโลกา สัทโท อัพภุคคัจฉิ. อะยัญจะ ทะสะสะหัสสี โลกะธาตุ สังกัมปิ สัมปะกัมปิ สัมปะเวธิ. อัปปะมาโณ จะ โอฬาโร โอภาโส โลเก ปาตุระโหสิ อะติกกัมเมวะ เทวานัง เทวานุภาวัง.' },
+      { p: 'อะถะโข ภะคะวา อุทานัง อุทาเนสิ. อัญญาสิ วะตะ โภ โกณฑัญโญ อัญญาสิ วะตะ โภ โกณฑัญโญติ.' },
+      { p: 'อิติหิทัง อายัสมะโต โกณฑัญญัสสะ อัญญาโกณฑัญโญเตวะ นามัง อะโหสีติ.' },
+    ],
+  },
+  {
+    id: 'bahung', tab: 'พาหุง',
+    title: 'พาหุง มหากา',
+    sub: 'ชัยมงคลคาถา ๘ บท ว่าด้วยชัยชนะของพระพุทธเจ้า ต่อด้วยมหาการุณิโก',
+    blocks: [
+      { n: 1, lines: ['พาหุง สะหัสสะมะภินิมมิตะสาวุธันตัง', 'ครีเมขะลัง อุทิตะโฆระสะเสนะมารัง', 'ทานาทิธัมมะวิธินา ชิตะวา มุนินโท', R] },
+      { n: 2, lines: ['มาราติเรกะมะภิยุชฌิตะสัพพะรัตติง', 'โฆรัมปะนาฬะวะกะมักขะมะถัทธะยักขัง', 'ขันตีสุทันตะวิธินา ชิตะวา มุนินโท', R] },
+      { n: 3, lines: ['นาฬาคิริง คะชะวะรัง อะติมัตตะภูตัง', 'ทาวัคคิจักกะมะสะนีวะ สุทารุณันตัง', 'เมตตัมพุเสกะวิธินา ชิตะวา มุนินโท', R] },
+      { n: 4, lines: ['อุกขิตตะขัคคะมะติหัตถะสุทารุณันตัง', 'ธาวันติโยชะนะปะถังคุลิมาละวันตัง', 'อิทธีภิสังขะตะมะโน ชิตะวา มุนินโท', R] },
+      { n: 5, lines: ['กัตวานะ กัฏฐะมุทะรัง อิวะ คัพภินียา', 'จิญจายะ ทุฏฐะวะจะนัง ชะนะกายะมัชเฌ', 'สันเตนะ โสมะวิธินา ชิตะวา มุนินโท', R] },
+      { n: 6, lines: ['สัจจัง วิหายะ มะติสัจจะกะวาทะเกตุง', 'วาทาภิโรปิตะมะนัง อะติอันธะภูตัง', 'ปัญญาปะทีปะชะลิโต ชิตะวา มุนินโท', R] },
+      { n: 7, lines: ['นันโทปะนันทะภุชะคัง วิพุธัง มะหิทธิง', 'ปุตเตนะ เถระภุชะเคนะ ทะมาปะยันโต', 'อิทธูปะเทสะวิธินา ชิตะวา มุนินโท', R] },
+      { n: 8, lines: ['ทุคคาหะทิฏฐิภุชะเคนะ สุทัฏฐะหัตถัง', 'พรัหมัง วิสุทธิชุติมิทธิพะกาภิธานัง', 'ญาณาคะเทนะ วิธินา ชิตะวา มุนินโท', R] },
+      { n: 9, lines: ['เอตาปิ พุทธะชะยะมังคะละอัฏฐะคาถา', 'โย วาจะโน ทินะทิเน สะระเต มะตันที', 'หิตวานะเนกะวิวิธานิ จุปัททะวานิ', 'โมกขัง สุขัง อะธิคะเมยยะ นะโร สะปัญโญ.'] },
+      { note: 'มหาการุณิโก (ชยปริตร)', lines: ['มะหาการุณิโก นาโถ หิตายะ สัพพะปาณินัง', 'ปูเรตวา ปาระมี สัพพา ปัตโต สัมโพธิมุตตะมัง', 'เอเตนะ สัจจะวัชเชนะ โหตุ เต ชะยะมังคะลัง.'] },
+      { lines: ['ชะยันโต โพธิยา มูเล สักยานัง นันทิวัฑฒะโน', 'เอวัง ตวัง วิชะโย โหหิ ชะยัสสุ ชะยะมังคะเล', 'อะปะราชิตะปัลลังเก สีเส ปะฐะวิโปกขะเร', 'อะภิเสเก สัพพะพุทธานัง อัคคัปปัตโต ปะโมทะติ.'] },
+      { lines: ['สุนักขัตตัง สุมังคะลัง สุปะภาตัง สุหุฏฐิตัง', 'สุขะโณ สุมุหุตโต จะ สุยิฏฐัง พรัหมะจาริสุ', 'ปะทักขิณัง กายะกัมมัง วาจากัมมัง ปะทักขิณัง', 'ปะทักขิณัง มะโนกัมมัง ปะณิธี เต ปะทักขิณา', 'ปะทักขิณานิ กัตวานะ ละภันตัตเถ ปะทักขิเณ.'] },
+      { lines: ['ภะวะตุ สัพพะมังคะลัง รักขันตุ สัพพะเทวะตา', 'สัพพะพุทธานุภาเวนะ สะทา โสตถี ภะวันตุ เต.'] },
+      { lines: ['ภะวะตุ สัพพะมังคะลัง รักขันตุ สัพพะเทวะตา', 'สัพพะธัมมานุภาเวนะ สะทา โสตถี ภะวันตุ เต.'] },
+      { lines: ['ภะวะตุ สัพพะมังคะลัง รักขันตุ สัพพะเทวะตา', 'สัพพะสังฆานุภาเวนะ สะทา โสตถี ภะวันตุ เต.'] },
+    ],
+  },
+  {
+    id: 'chinabanchon', tab: 'ชินบัญชร',
+    title: 'พระคาถาชินบัญชร',
+    sub: 'ของสมเด็จพระพุฒาจารย์ (โต พรหมรังสี) ต่อด้วยบทแผ่เมตตา',
+    blocks: [
+      { note: 'บทระลึก' },
+      { lines: ['ปุตตะกาโม ละเภ ปุตตัง ธะนะกาโม ละเภ ธะนัง', 'อัตถิ กาเย กายะ ญายะ เทวานัง ปิยะตัง สุตตะวา', 'อิติปิ โส ภะคะวา ยะมะราชาโน ท้าวเวสสุวัณโณ', 'มะระณัง สุขัง อะระหัง สุคะโต นะโม พุทธายะ'] },
+      { note: 'บทสวด' },
+      { n: 1, lines: ['ชะยาสะนาคะตา พุทธา เชตวา มารัง สะวาหะนัง', 'จะตุสัจจาสะภัง ระสัง เย ปิวิงสุ นะราสะภา'] },
+      { n: 2, lines: ['ตัณหังกะราทะโย พุทธา อัฏฐะวีสะติ นายะกา', 'สัพเพ ปะติฏฐิตา มัยหัง มัตถะเก เต มุนิสสะรา'] },
+      { n: 3, lines: ['สีเส ปะติฏฐิโต มัยหัง พุทโธ ธัมโม ทะวิโลจะเน', 'สังโฆ ปะติฏฐิโต มัยหัง อุเร สัพพะคุณากะโร'] },
+      { n: 4, lines: ['หะทะเย เม อะนุรุทโธ สารีปุตโต จะ ทักขิเณ', 'โกณฑัญโญ ปิฏฐิภาคัสมิง โมคคัลลาโน จะ วามะเก'] },
+      { n: 5, lines: ['ทักขิเณ สะวะเน มัยหัง อาสุง อานันทะราหุโล', 'กัสสะโป จะ มะหานาโม อุภาสุง วามะโสตะเก'] },
+      { n: 6, lines: ['เกสันเต ปิฏฐิภาคัสมิง สุริโย วะ ปะภังกะโร', 'นิสินโน สิริสัมปันโน โสภิโต มุนิปุงคะโว'] },
+      { n: 7, lines: ['กุมาระกัสสะโป เถโร มะเหสี จิตตะวาทะโก', 'โส มัยหัง วะทะเน นิจจัง ปะติฏฐาสิ คุณากะโร'] },
+      { n: 8, lines: ['ปุณโณ อังคุลิมาโล จะ อุปาลี นันทะสีวะลี', 'เถรา ปัญจะ อิเม ชาตา นะลาเฏ ติละกา มะมะ'] },
+      { n: 9, lines: ['เสสาสีติ มะหาเถรา วิชิตา ชินะสาวะกา', 'เอเตสีติ มะหาเถรา ชิตะวันโต ชิโนระสา', 'ชะลันตา สีละเตเชนะ อังคะมังเคสุ สัณฐิตา'] },
+      { n: 10, lines: ['ระตะนัง ปุระโต อาสิ ทักขิเณ เมตตะสุตตะกัง', 'ธะชัคคัง ปัจฉะโต อาสิ วาเม อังคุลิมาละกัง'] },
+      { n: 11, lines: ['ขันธะโมระปะริตตัญจะ อาฏานาฏิยะสุตตะกัง', 'อากาเส ฉะทะนัง อาสิ เสสา ปาการะสัณฐิตา'] },
+      { n: 12, lines: ['ชินา นานาวะระสังยุตตา สัตตัปปาการะลังกะตา', 'วาตะปิตตาทิสัญชาตา พาหิรัชฌัตตุปัททะวา'] },
+      { n: 13, lines: ['อะเสสา วินะยัง ยันตุ อะนันตะชินะเตชะสา', 'วะสะโต เม สะกิจเจนะ สะทา สัมพุทธะปัญชะเร'] },
+      { n: 14, lines: ['ชินะปัญชะระมัชฌัมหิ วิหะรันตัง มะหีตะเล', 'สะทา ปาเลนตุ มัง สัพเพ เต มะหาปุริสาสะภา'] },
+      { n: 15, lines: ['อิจเจวะมันโต สุคุตโต สุรักโข', 'ชินานุภาเวนะ ชิตุปัททะโว', 'ธัมมานุภาเวนะ ชิตาริสังโฆ', 'สังฆานุภาเวนะ ชิตันตะราโย', 'สัทธัมมานุภาวะปาลิโต', 'จะรามิ ชินะปัญชะเรติ.'] },
+      { note: 'บทแผ่เมตตา' },
+      { p: 'สัพเพ สัตตา สัตว์ทั้งหลายที่เป็นเพื่อนทุกข์ เกิด แก่ เจ็บ ตาย ด้วยกันหมดทั้งสิ้น' },
+      { p: 'อะเวรา จงเป็นสุขเป็นสุขเถิด อย่าได้มีเวรแก่กันและกันเลย' },
+      { p: 'สัพเพ สัตตา สัตว์ทั้งหลายที่เป็นเพื่อนทุกข์ เกิด แก่ เจ็บ ตาย ด้วยกันหมดทั้งสิ้น' },
+      { p: 'อัพยาปัชฌา จงเป็นสุขเป็นสุขเถิด อย่าได้เบียดเบียนซึ่งกันและกันเลย' },
+      { p: 'สัพเพ สัตตา สัตว์ทั้งหลายที่เป็นเพื่อนทุกข์ เกิด แก่ เจ็บ ตาย ด้วยกันหมดทั้งสิ้น' },
+      { p: 'อะนีฆา จงเป็นสุขเป็นสุขเถิด อย่าได้มีความทุกข์กายทุกข์ใจเลย' },
+      { p: 'สัพเพ สัตตา สัตว์ทั้งหลายที่เป็นเพื่อนทุกข์ เกิด แก่ เจ็บ ตาย ด้วยกันหมดทั้งสิ้น' },
+      { p: 'สุขี อัตตานัง ปะริหะรันตุ จงมีความสุขกายสุขใจ รักษาตนให้พ้นจากทุกข์ภัยทั้งสิ้นเถิด ท่านทั้งหลายที่ท่านได้ทุกข์ ขอให้ท่านมีความสุข ท่านทั้งหลายที่ท่านได้สุข ขอให้สุขยิ่ง ๆ' },
+      { p: 'สัพเพ สัตตา สัตว์ทั้งหลายที่เกิดเป็นชะลาพุชะ ที่เกิดเป็นอัณฑะชะ ที่เกิดเป็นสังเสทะชะ ที่เกิดเป็นโอปปาติกะ จงมารับกุศลผลบุญให้ถ้วนทั่วทุกตัวสัตว์' },
+    ],
+  },
+];
+
+const NAMO = { note: 'ตั้งนะโม ๓ จบ', lines: ['นะโม ตัสสะ ภะคะวะโต อะระหะโต สัมมาสัมพุทธัสสะ', 'นะโม ตัสสะ ภะคะวะโต อะระหะโต สัมมาสัมพุทธัสสะ', 'นะโม ตัสสะ ภะคะวะโต อะระหะโต สัมมาสัมพุทธัสสะ'] };
+const TABS = [...CHANTS.map(c => ({ id: c.id, label: c.tab })), { id: 'all', label: 'สวดต่อเนื่องทั้งหมด' }, { id: 'log', label: 'บันทึก ๙๐ คืน' }, { id: 'about', label: 'ผู้จัดทำ' }];
+
+const AVATAR = '/img/samit.jpg';
+const thaiNum = n => String(n).replace(/\d/g, d => '๐๑๒๓๔๕๖๗๘๙'[d]);
+const esc = s => s.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+
+function blockHTML(b) {
+  let h = '';
+  if (b.note) h += `<div class="note">${esc(b.note)}</div>`;
+  if (b.lines) h += `<div class="stanza"><div class="n">${b.n ? thaiNum(b.n) : ''}</div><div class="lines">${
+    b.lines.map(l => `<div${l === R ? ' class="r"' : ''}>${esc(l)}</div>`).join('')}</div></div>`;
+  if (b.p) h += `<p class="prose">${esc(b.p)}</p>`;
+  return h;
+}
+function chantHTML(c, withNamo) { return chantBody(c, withNamo); }
+
+const $ = id => document.getElementById(id);
+const store = {
+  get(k, d) { try { const v = localStorage.getItem('chant.' + k); return v === null ? d : JSON.parse(v); } catch { return d; } },
+  set(k, v) { try { localStorage.setItem('chant.' + k, JSON.stringify(v)); } catch {} },
+};
+
+// rounds: the core of each chant repeats; its opening and closing parts are chanted once
+const PRESETS = [1, 3, 9, 30, 60, 90, 108];
+const MAX_ROUNDS = 108;
+const partOf = (c, note) => { const i = c.blocks.findIndex(b => b.note && b.note.startsWith(note)); return i < 0 ? null : i; };
+const SPLIT = {
+  dhamma: { pre: 2 },
+  chinabanchon: { pre: 2, post: 'บทแผ่เมตตา' },
+  bahung: { post: 'มหาการุณิโก' },
+};
+function parts(c) {
+  const sp = SPLIT[c.id] || {};
+  const pre = sp.pre || 0;
+  const post = sp.post ? partOf(c, sp.post) : null;
+  const end = post === null ? c.blocks.length : post;
+  return { pre: c.blocks.slice(0, pre), core: c.blocks.slice(pre, end), post: c.blocks.slice(end) };
+}
+let rounds = store.get('rounds', {});
+const roundsOf = id => Math.min(MAX_ROUNDS, Math.max(1, rounds[id] | 0 || 1));
+function roundsHTML(c) {
+  const r = roundsOf(c.id);
+  return `<div class="rounds" data-rid="${c.id}">
+    <span class="rl">จำนวนรอบ</span>
+    <button class="rbtn" data-r="-1" aria-label="ลดรอบ">−</button>
+    <span class="val" aria-live="polite">${thaiNum(r)}</span>
+    <button class="rbtn" data-r="1" aria-label="เพิ่มรอบ">+</button>
+    <span class="gap"></span>
+    ${PRESETS.map(p => `<button class="rbtn pre" data-set="${p}" aria-pressed="${p === r}">${thaiNum(p)}</button>`).join('')}
+  </div>`;
+}
+function chantBody(c, withNamo) {
+  const r = roundsOf(c.id), { pre, core, post } = parts(c);
+  let body = (withNamo ? [NAMO, ...pre] : pre).map(blockHTML).join('');
+  const coreHTML = core.map(blockHTML).join('');
+  for (let i = 1; i <= r; i++) {
+    body += r > 1
+      ? `<div class="round" data-t="${esc(c.tab)}" data-n="${i}" data-of="${r}">รอบที่ ${thaiNum(i)} / ${thaiNum(r)}</div>`
+      : `<div class="round silent" data-t="${esc(c.tab)}" data-n="1" data-of="1"></div>`;
+    body += coreHTML;
+  }
+  body += post.map(blockHTML).join('');
+  return `<section class="chant"><h2>${esc(c.title)}</h2><p class="sub">${esc(c.sub)}</p>${roundsHTML(c)}${body}</section>`;
+}
+
+const SPEEDS = [6, 9, 12, 16, 20, 25, 31, 38, 46, 56]; // px per second
+let speedIdx = store.get('speed', 3);
+let size = store.get('size', 24);
+let current = store.get('tab', 'itipiso');
+if (!TABS.some(t => t.id === current)) current = 'itipiso';
+
+function renderTabs() {
+  $('tabs').innerHTML = TABS.map(t =>
+    `<button class="tab" role="tab" id="tab-${t.id}" aria-selected="${t.id === current}" data-id="${t.id}">${t.label}</button>`).join('');
+}
+function renderReader() {
+  document.body.classList.toggle('logview', current === 'log' || current === 'about');
+  clearKaraoke();
+  if (current === 'log') { renderJournal(); return; }
+  if (current === 'about') { markers = []; updateRound(); renderAbout(); return; }
+  const list = current === 'all' ? CHANTS : CHANTS.filter(c => c.id === current);
+  $('reader').innerHTML = list.map((c, i) => chantHTML(c, i === 0)).join('') + '<div class="end">สาธุ สาธุ สาธุ</div>';
+  markers = [...document.querySelectorAll('#reader .round')];
+  updateRound();
+}
+
+// where am I: the last round marker above the reading line
+let markers = [], roundRaf = 0;
+function updateRound() {
+  roundRaf = 0;
+  const el = $('roundNow');
+  if (current === 'log' || current === 'about' || !markers.length) { el.hidden = true; return; }
+  const y = window.innerHeight * READ_AT;
+  let lo = 0, hi = markers.length - 1, at = 0;
+  while (lo <= hi) { const mid = (lo + hi) >> 1; if (markers[mid].getBoundingClientRect().top < y) { at = mid; lo = mid + 1; } else hi = mid - 1; }
+  const m = markers[at];
+  if (m.dataset.of === '1') { el.hidden = true; return; }
+  el.hidden = false;
+  el.textContent = `${m.dataset.t} · รอบ ${thaiNum(m.dataset.n)}/${thaiNum(m.dataset.of)}`;
+  // while the text scrolls by itself, rounds already passed count as done
+  if (playing && current !== 'all') syncCounter(+m.dataset.n - 1);
+}
+window.addEventListener('scroll', () => { if (!roundRaf) roundRaf = requestAnimationFrame(updateRound); }, { passive: true });
+
+$('reader').addEventListener('click', e => {
+  const box = e.target.closest('.rounds'); if (!box) return;
+  e.stopPropagation();
+  const b = e.target.closest('button'); if (!b) return;
+  const id = box.dataset.rid;
+  const next = b.dataset.set ? +b.dataset.set : roundsOf(id) + +b.dataset.r;
+  rounds = { ...rounds, [id]: Math.min(MAX_ROUNDS, Math.max(1, next)) };
+  store.set('rounds', rounds);
+  const y = window.scrollY;
+  renderReader();
+  window.scrollTo(0, y); pos = y; lastSet = window.scrollY; updateProgress(); renderCounter();
+});
+function applySize() { document.documentElement.style.setProperty('--size', size + 'px'); }
+function applySpeed() { $('speedVal').textContent = thaiNum(speedIdx + 1); }
+
+$('tabs').addEventListener('click', e => {
+  const b = e.target.closest('.tab'); if (!b) return;
+  current = b.dataset.id; store.set('tab', current);
+  stop(); renderTabs(); renderReader(); window.scrollTo(0, 0); pos = 0; updateProgress(); renderCounter();
+});
+
+// ---- karaoke: text fills with colour as it crosses the reading line ----
+const READ_AT = 0.4; // reading line, as a share of the screen height
+const HL = typeof CSS !== 'undefined' && 'highlights' in CSS && typeof Highlight === 'function';
+function caretAt(x, y) {
+  if (document.caretPositionFromPoint) { const p = document.caretPositionFromPoint(x, y); return p && { node: p.offsetNode, offset: p.offset }; }
+  if (document.caretRangeFromPoint) { const r = document.caretRangeFromPoint(x, y); return r && { node: r.startContainer, offset: r.startOffset }; }
+  return null;
+}
+function clearKaraoke() { if (HL) CSS.highlights.delete('sung'); }
+let karaokeOn = store.get('karaoke', false);
+function karaoke() {
+  if (!HL || !karaokeOn || current === 'log') return;
+  const reader = $('reader'), box = reader.getBoundingClientRect(), y = window.innerHeight * READ_AT;
+  const hit = caretAt(box.left + box.width / 2, y);
+  if (!hit || hit.node.nodeType !== 3 || !reader.contains(hit.node) || hit.node.parentElement.closest('.rounds')) return;
+  // the visual line under the reading line
+  const n = hit.node, len = n.length, o = Math.min(hit.offset, Math.max(0, len - 1));
+  const probe = document.createRange(); probe.setStart(n, o); probe.setEnd(n, Math.min(len, o + 1));
+  const line = probe.getBoundingClientRect();
+  if (!line.height || line.top > y) { if (window.scrollY < 2) clearKaraoke(); return; }
+  // sweep left to right while that line passes the reading line
+  const f = Math.min(1, Math.max(0, (y - line.top) / line.height));
+  const at = caretAt(box.left + f * box.width, line.top + line.height / 2);
+  if (!at || at.node.nodeType !== 3 || !reader.contains(at.node)) return;
+  // colour from a few blocks back (everything above is already off screen)
+  let blk = at.node.parentElement.closest('.prose, .stanza, .note, .round, .sub, h2') || at.node.parentElement;
+  for (let i = 0; i < 8 && blk.previousElementSibling; i++) blk = blk.previousElementSibling;
+  const sung = document.createRange(); sung.setStartBefore(blk); sung.setEnd(at.node, at.offset);
+  CSS.highlights.set('sung', new Highlight(sung));
+}
+
+function applyKaraoke() {
+  const b = $('hlToggle');
+  b.setAttribute('aria-pressed', String(karaokeOn));
+  b.hidden = !HL;
+}
+$('hlToggle').addEventListener('click', () => {
+  karaokeOn = !karaokeOn; store.set('karaoke', karaokeOn); applyKaraoke();
+  if (karaokeOn) { karaoke(); toast('เปิดไฮไลต์ตามจังหวะอ่าน'); } else { clearKaraoke(); toast('ปิดไฮไลต์แล้ว'); }
+});
+
+function renderAbout() {
+  $('reader').innerHTML = `<div class="about">
+    <div class="who">
+      <img src="${AVATAR}" alt="อาจารย์สามิตร โกยม" width="96" height="96">
+      <div>
+        <h2>อาจารย์สามิตร โกยม</h2>
+        <div class="en">Samit Koyom</div>
+        <p class="role">ผู้ก่อตั้งและ CEO สถาบันไอทีจีเนียส</p>
+      </div>
+    </div>
+    <div class="card">
+      <div class="lbl">ผู้จัดทำแอป</div>
+      <p>ผู้ก่อตั้งและกรรมการผู้จัดการ บริษัท ไอที จีเนียส เอ็นจิเนียริ่ง จำกัด ทำงานด้านไอทีมากว่า 15 ปี ทั้งเป็นนักพัฒนาโปรแกรม ที่ปรึกษา และวิทยากร สอนตั้งแต่การใช้ AI ช่วยทำงาน ไปจนถึงการสร้างเว็บ แอปมือถือ ฐานข้อมูล และ Power BI โดยเน้นสอนจากงานที่ทำจริง</p>
+    </div>
+    <div class="facts">
+      <div><b>15+</b><span>ปีในวงการไอที</span></div>
+      <div><b>100+</b><span>หลักสูตรที่สอน</span></div>
+      <div><b>300+</b><span>องค์กรที่อบรม</span></div>
+    </div>
+    <div class="card">
+      <div class="lbl">การศึกษา</div>
+      <p>ปริญญาโท คณะเทคโนโลยีและสารสนเทศ มหาวิทยาลัยเทคโนโลยีพระจอมเกล้าพระนครเหนือ</p>
+    </div>
+    <div class="card">
+      <div class="lbl">หัวข้อที่สอน</div>
+      <div class="tags"><span>AI & Generative AI</span><span>AI Agents & Automation</span><span>Python & Data Science</span><span>Power BI</span><span>Microsoft 365 & Copilot</span><span>Flutter & Mobile App</span><span>Next.js & React</span><span>Cloud & DevOps</span></div>
+    </div>
+    <div class="links">
+      <a class="link primary" href="https://www.itgenius.co.th" target="_blank" rel="noopener">ไปที่เว็บไซต์สถาบันไอทีจีเนียส</a>
+      <a class="link" href="https://www.itgenius.co.th/instructor/samit-koyom/" target="_blank" rel="noopener">ดูประวัติวิทยากรฉบับเต็ม</a>
+    </div>
+    <p class="small">ข้อมูลจากหน้าประวัติวิทยากรบนเว็บไซต์สถาบันไอทีจีเนียส</p>
+  </div>`;
+}
+
+// ---- auto-scroll ----
+let playing = false, pos = 0, last = 0, lastSet = 0, holding = false, raf = 0, wake = null;
+const maxScroll = () => document.documentElement.scrollHeight - window.innerHeight;
+
+function tick(t) {
+  if (!playing) return;
+  const dt = Math.min(0.1, (t - last) / 1000); last = t;
+  if (Math.abs(window.scrollY - lastSet) > 3) pos = window.scrollY; // user moved the page
+  if (!holding) {
+    pos += SPEEDS[speedIdx] * dt;
+    if (pos >= maxScroll()) { pos = maxScroll(); window.scrollTo(0, pos); stop(); if (current !== 'all') syncCounter(roundsOf(current)); logChants(current === 'all' ? CHANT_IDS : [current]); return; }
+    window.scrollTo(0, pos);
+  }
+  lastSet = window.scrollY;
+  karaoke();
+  raf = requestAnimationFrame(tick);
+}
+async function lockScreen() {
+  try { if ('wakeLock' in navigator) wake = await navigator.wakeLock.request('screen'); } catch { wake = null; }
+}
+function start() {
+  if (window.scrollY >= maxScroll() - 2) { window.scrollTo(0, 0); clearKaraoke(); }
+  playing = true; pos = window.scrollY; lastSet = pos; last = performance.now();
+  document.body.classList.add('playing');
+  $('playIcon').innerHTML = '<rect x="6.5" y="5" width="4" height="14" rx="1"/><rect x="13.5" y="5" width="4" height="14" rx="1"/>';
+  $('play').setAttribute('aria-label', 'หยุดเลื่อน');
+  $('hint').textContent = 'กำลังเลื่อน · แตะเพื่อหยุด';
+  lockScreen();
+  raf = requestAnimationFrame(tick);
+}
+function stop() {
+  playing = false; cancelAnimationFrame(raf);
+  document.body.classList.remove('playing');
+  $('playIcon').innerHTML = '<path d="M8 5.5v13l11-6.5z"/>';
+  $('play').setAttribute('aria-label', 'เริ่มเลื่อนอัตโนมัติ');
+  $('hint').textContent = 'แตะที่ตัวอักษรเพื่อเริ่ม/หยุด';
+  try { wake && wake.release(); } catch {} wake = null;
+}
+const toggle = () => { if (current === 'log' || current === 'about') return; playing ? stop() : start(); };
+
+$('play').addEventListener('click', toggle);
+$('main').addEventListener('click', toggle);
+window.addEventListener('touchstart', () => { holding = true; }, { passive: true });
+window.addEventListener('touchend', () => { holding = false; pos = window.scrollY; lastSet = pos; }, { passive: true });
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && playing) lockScreen(); });
+
+$('slower').addEventListener('click', () => { speedIdx = Math.max(0, speedIdx - 1); store.set('speed', speedIdx); applySpeed(); });
+$('faster').addEventListener('click', () => { speedIdx = Math.min(SPEEDS.length - 1, speedIdx + 1); store.set('speed', speedIdx); applySpeed(); });
+function resize(d) {
+  const ratio = window.scrollY / Math.max(1, maxScroll());
+  size = Math.max(16, Math.min(40, size + d)); store.set('size', size); applySize();
+  pos = ratio * maxScroll(); window.scrollTo(0, pos); lastSet = window.scrollY;
+}
+$('smaller').addEventListener('click', () => resize(-2));
+$('bigger').addEventListener('click', () => resize(2));
+$('top').addEventListener('click', () => { window.scrollTo(0, 0); pos = 0; lastSet = 0; clearKaraoke(); });
+
+// theme: dark-first; remembers explicit choice
+const root = document.documentElement;
+const savedTheme = store.get('theme', null);
+if (savedTheme) root.setAttribute('data-theme', savedTheme);
+$('theme').addEventListener('click', () => {
+  const isDark = root.getAttribute('data-theme')
+    ? root.getAttribute('data-theme') === 'dark'
+    : !matchMedia('(prefers-color-scheme: light)').matches;
+  const next = isDark ? 'light' : 'dark';
+  root.setAttribute('data-theme', next); store.set('theme', next);
+});
+
+function updateProgress() {
+  const m = maxScroll();
+  $('progress').style.width = (m > 0 ? Math.min(100, window.scrollY / m * 100) : 0) + '%';
+}
+window.addEventListener('scroll', updateProgress, { passive: true });
+
+// ---- journal: 90-night goal ----
+const GOAL = 90;
+const CHANT_IDS = CHANTS.map(c => c.id);
+const ymd = x => x.getFullYear() + '-' + String(x.getMonth() + 1).padStart(2, '0') + '-' + String(x.getDate()).padStart(2, '0');
+const parseK = k => { const [y, m, d] = k.split('-').map(Number); return new Date(y, m - 1, d); };
+const addDays = (k, n) => { const x = parseK(k); x.setDate(x.getDate() + n); return ymd(x); };
+const diffDays = (a, b) => Math.round((parseK(b) - parseK(a)) / 864e5);
+// chanting between midnight and 06:00 counts for the night before
+const nightKey = () => { const x = new Date(); if (x.getHours() < 6) x.setDate(x.getDate() - 1); return ymd(x); };
+const fmt = (k, o = { day: 'numeric', month: 'short', year: '2-digit' }) => parseK(k).toLocaleDateString('th-TH', o);
+
+let journal = { start: null, days: {} }, jBackend = 'loading', confirmReset = false;
+const normalize = d => ({
+  start: d && typeof d.start === 'string' ? d.start : null,
+  days: d && d.days && typeof d.days === 'object' ? JSON.parse(JSON.stringify(d.days)) : {},
+});
+const chantsOn = k => (journal.days[k] && Array.isArray(journal.days[k].c)) ? journal.days[k].c : [];
+const isDone = k => chantsOn(k).length > 0;
+
+function useLocal() {
+  jBackend = 'local';
+  journal = normalize(store.get('journal', null));
+  if (current === 'log') renderJournal();
+}
+function initJournal() {
+  useLocal();
+  try { navigator.storage && navigator.storage.persist && navigator.storage.persist(); } catch {}
+}
+function save() {
+  try { localStorage.setItem('chant.journal', JSON.stringify(journal)); }
+  catch { toast('บันทึกไม่สำเร็จ เบราว์เซอร์นี้ไม่อนุญาตให้เก็บข้อมูล'); }
+}
+function exportJournal() {
+  const blob = new Blob([JSON.stringify({ app: 'bedtime-chant', v: 1, ...journal }, null, 2)], { type: 'application/json' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'บันทึกสวดมนต์-' + nightKey() + '.json';
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+function importJournal(file) {
+  const fr = new FileReader();
+  fr.onload = () => {
+    try {
+      const d = JSON.parse(fr.result);
+      if (!d || typeof d.days !== 'object') throw 0;
+      journal = normalize(d); save(); renderJournal(); toast('นำข้อมูลกลับมาแล้ว');
+    } catch { toast('ไฟล์นี้ไม่ใช่ไฟล์สำรองของแอปนี้'); }
+  };
+  fr.readAsText(file);
+}
+const roundsOn = k => (journal.days[k] && journal.days[k].r) || {};
+function setToday(ids, r = {}) {
+  const k = nightKey();
+  const days = { ...journal.days };
+  const rr = {}; ids.forEach(id => { rr[id] = r[id] || 1; });
+  if (ids.length) days[k] = { c: ids, r: rr, at: new Date().toISOString() }; else delete days[k];
+  journal = { start: journal.start || (ids.length ? k : null), days };
+  save();
+}
+function logChants(ids) {
+  const k = nightKey(), prev = chantsOn(k), had = prev.length > 0, r = { ...roundsOn(k) };
+  ids.forEach(id => { r[id] = (prev.includes(id) ? (r[id] || 1) : 0) + roundsOf(id); });
+  setToday(CHANT_IDS.filter(id => prev.includes(id) || ids.includes(id)), r);
+  const what = ids.length === 1 ? ` · ${CHANTS.find(c => c.id === ids[0]).tab} ${thaiNum(roundsOf(ids[0]))} รอบ` : '';
+  toast(had ? `บันทึกเพิ่มแล้ว${what}` : `บันทึกแล้ว${what} · ต่อเนื่อง ${thaiNum(stats().streak)} คืน`);
+}
+function stats() {
+  const today = nightKey();
+  let k = isDone(today) ? today : addDays(today, -1), streak = 0;
+  while (isDone(k)) { streak++; k = addDays(k, -1); }
+  const keys = Object.keys(journal.days).filter(isDone).sort();
+  let best = 0, run = 0, prev = null;
+  for (const d of keys) { run = prev && diffDays(prev, d) === 1 ? run + 1 : 1; best = Math.max(best, run); prev = d; }
+  const s = journal.start;
+  if (!s) return { today, streak, best };
+  const end = addDays(s, GOAL - 1), over = today > end;
+  const inGoal = keys.filter(d => d >= s && d <= end).length;
+  const elapsed = Math.min(GOAL, diffDays(s, today) + 1);
+  // nights already past without a record (tonight is not counted as missed yet)
+  const pastNights = over ? GOAL : Math.max(0, elapsed - 1);
+  const missed = Math.max(0, pastNights - keys.filter(d => d >= s && d < (over ? addDays(end, 1) : today)).length);
+  return { today, streak, best, inGoal, elapsed, missed, end, over };
+}
+
+function renderJournal() {
+  const r = $('reader');
+  if (jBackend === 'loading') { r.innerHTML = '<div class="jr"><p class="muted">กำลังเปิดบันทึก…</p></div>'; return; }
+  const st = stats(), s = journal.start, today = st.today, todayC = chantsOn(today);
+  const C = 2 * Math.PI * 42, frac = Math.min(1, st.streak / GOAL);
+  let body = s
+    ? `<div class="jhead">
+        <div class="ring" role="img" aria-label="ต่อเนื่อง ${st.streak} จาก ${GOAL} คืน">
+          <svg viewBox="0 0 100 100"><circle class="track" cx="50" cy="50" r="42"/><circle class="val" cx="50" cy="50" r="42" stroke-dasharray="${C}" stroke-dashoffset="${C * (1 - frac)}"/></svg>
+          <div class="num"><div><b>${thaiNum(st.streak)}</b><span>จาก ${thaiNum(GOAL)} คืน</span></div></div>
+        </div>
+        <div class="txt">
+          <h2>${st.streak >= GOAL ? 'ครบ ๙๐ คืนต่อเนื่องแล้ว อนุโมทนาครับ' : st.over ? 'ครบกำหนด ๓ เดือนแล้ว' : 'สวดต่อเนื่อง ๓ เดือน'}</h2>
+          <p class="muted">เริ่ม ${fmt(s)} · ครบกำหนด ${fmt(st.end)}<br>${st.over ? 'เริ่มเป้าหมายรอบใหม่ได้ที่ด้านล่าง' : `คืนที่ ${thaiNum(st.elapsed)} จาก ${thaiNum(GOAL)} · เหลืออีก ${thaiNum(GOAL - st.elapsed)} คืน`}</p>
+        </div>
+      </div>`
+    : `<div class="card"><h2>ตั้งเป้าสวดต่อเนื่อง ๓ เดือน</h2>
+        <p class="muted gap">สวดติดต่อกัน ๙๐ คืน แอปจะนับให้ทุกครั้งที่เลื่อนอ่านอัตโนมัติจนจบบท หรือแตะบันทึกเองด้านล่าง</p>
+        <button class="jbtn primary wide" id="jStart">เริ่มนับตั้งแต่คืนนี้</button></div>`;
+
+  body += `<div class="card">
+      <div class="lbl">คืนนี้ · ${fmt(today, { weekday: 'long', day: 'numeric', month: 'long' })}${todayC.length ? '<span class="donebadge">✓ สวดแล้ว</span>' : ''}</div>
+      <div class="chips">${CHANTS.map(c => { const n = roundsOn(today)[c.id] || 0; return `<button class="chip" data-chip="${c.id}" aria-pressed="${todayC.includes(c.id)}">${c.tab}${todayC.includes(c.id) && n > 1 ? ` ×${thaiNum(n)}` : ''}</button>`; }).join('')}</div>
+      <p class="muted">แตะบทที่สวดแล้วเพื่อบันทึก (นับตามจำนวนรอบที่ตั้งไว้ในบทนั้น) ถ้าเลื่อนอ่านอัตโนมัติจนจบบท แอปจะบันทึกให้เอง สวดหลังเที่ยงคืนจนถึง ๖ โมงเช้า ยังนับเป็นของคืนก่อนหน้า</p>
+    </div>`;
+
+  if (s) {
+    body += `<div class="stats">
+        <div class="stat"><b>${thaiNum(st.inGoal)}</b><span>คืนที่สวดแล้ว</span></div>
+        <div class="stat"><b>${thaiNum(st.best)}</b><span>ต่อเนื่องนานสุด</span></div>
+        <div class="stat"><b>${thaiNum(st.missed)}</b><span>คืนที่ขาด</span></div>
+      </div>`;
+    let cells = ['อา', 'จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส'].map(w => `<div class="wd">${w}</div>`).join('');
+    cells += '<div class="cell pad"></div>'.repeat(parseK(s).getDay());
+    for (let i = 0; i < GOAL; i++) {
+      const k = addDays(s, i), d = parseK(k);
+      const cls = isDone(k) ? 'done' : k > today ? 'future' : k === today ? '' : 'miss';
+      const label = d.getDate() === 1 || i === 0
+        ? `<span><span class="m">${d.toLocaleDateString('th-TH', { month: 'short' })}</span>${thaiNum(d.getDate())}</span>`
+        : thaiNum(d.getDate());
+      cells += `<div class="cell ${cls}${k === today ? ' today' : ''}" title="${fmt(k)}">${label}</div>`;
+    }
+    body += `<div class="card"><div class="lbl">ปฏิทิน ๙๐ คืน</div><div class="cal">${cells}</div>
+        <div class="legend"><span><i class="lg-done"></i>สวดแล้ว</span><span><i class="lg-miss"></i>ขาด</span><span><i class="lg-today"></i>คืนนี้</span></div></div>`;
+    body += confirmReset
+      ? `<div class="card"><p class="muted gap">เริ่มเป้าหมายใหม่ตั้งแต่คืนนี้? ประวัติที่สวดไว้ยังเก็บอยู่ แต่ปฏิทินและตัวนับรอบนี้จะเริ่มที่คืนนี้</p>
+          <div class="row"><button class="jbtn primary" id="jResetYes">เริ่มรอบใหม่</button><button class="jbtn" id="jResetNo">ยกเลิก</button></div></div>`
+      : `<div class="row"><button class="jbtn warn" id="jReset">เริ่มเป้าหมายรอบใหม่</button></div>`;
+  }
+  body += `<div class="card"><div class="lbl">สำรองข้อมูล</div>
+      <p class="muted gap">บันทึกเก็บไว้ในเบราว์เซอร์ของเครื่องนี้เท่านั้น ไม่ได้ส่งไปที่ไหน ถ้าล้างข้อมูลเบราว์เซอร์หรือเปลี่ยนเครื่อง ข้อมูลจะหาย ควรสำรองเก็บไว้เป็นระยะ</p>
+      <div class="row"><button class="jbtn" id="jExport">ดาวน์โหลดไฟล์สำรอง</button><label class="jbtn" for="jImport">นำไฟล์สำรองกลับมา</label><input type="file" id="jImport" accept="application/json,.json" hidden></div></div>`;
+  r.innerHTML = `<div class="jr">${body}</div>`;
+}
+
+$('reader').addEventListener('click', e => {
+  if (current !== 'log') return;
+  e.stopPropagation();
+  const chip = e.target.closest('[data-chip]');
+  if (chip) {
+    const id = chip.dataset.chip, prev = chantsOn(nightKey()), had = prev.length > 0;
+    const next = prev.includes(id) ? prev.filter(x => x !== id) : CHANT_IDS.filter(x => x === id || prev.includes(x));
+    const r = { ...roundsOn(nightKey()) };
+    if (prev.includes(id)) delete r[id]; else r[id] = roundsOf(id);
+    setToday(next, r);
+    if (!had && next.length) toast(`บันทึกแล้ว · ต่อเนื่อง ${thaiNum(stats().streak)} คืน`);
+    renderJournal(); return;
+  }
+  if (e.target.closest('label')) return;
+  const t = e.target.closest('button'); if (!t) return;
+  if (t.id === 'jExport') { exportJournal(); return; }
+  if (t.id === 'jStart') { journal = { ...journal, start: nightKey() }; save(); }
+  if (t.id === 'jReset') confirmReset = true;
+  if (t.id === 'jResetNo') confirmReset = false;
+  if (t.id === 'jResetYes') { confirmReset = false; journal = { ...journal, start: nightKey() }; save(); toast('เริ่มนับรอบใหม่แล้ว'); }
+  renderJournal();
+});
+
+$('reader').addEventListener('change', e => {
+  if (e.target.id === 'jImport' && e.target.files[0]) importJournal(e.target.files[0]);
+});
+let toastTimer = 0;
+function toast(msg) {
+  const el = $('toast'); el.textContent = msg; el.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove('show'), 2600);
+}
+
+// ---- tap counter: count rounds by hand, per tab, starting fresh each night ----
+let counter = store.get('counter', { night: null, c: {} });
+function counts() {
+  if (!counter || counter.night !== nightKey()) counter = { night: nightKey(), c: {} };
+  return counter.c;
+}
+let resetTimer = 0;
+function disarmReset() { clearTimeout(resetTimer); resetTimer = 0; const r = $('counterReset'); r.classList.remove('armed'); r.textContent = 'ล้าง'; }
+function renderCounter() {
+  const target = current === 'all' || current === 'log' ? 0 : roundsOf(current);
+  const n = target ? Math.min(target, counts()[current] || 0) : (counts()[current] || 0);
+  $('cNum').textContent = thaiNum(n);
+  $('cOf').textContent = target > 1 ? 'จบ / ' + thaiNum(target) : 'รอบ';
+  const fab = $('counter');
+  fab.classList.toggle('done', target > 1 && n >= target);
+  fab.setAttribute('aria-label', `นับรอบ ${n}${target > 1 ? ' จาก ' + target : ''} แตะเพื่อเพิ่ม`);
+  $('counterReset').hidden = n === 0;
+  if (n === 0) disarmReset();
+}
+$('counter').addEventListener('click', () => {
+  const c = counts(), target = current === 'all' ? 0 : roundsOf(current), had = c[current] || 0;
+  // stop at the number of rounds set for this chant
+  if (target && had >= target) {
+    try { navigator.vibrate && navigator.vibrate([20, 60, 20]); } catch {}
+    toast(`ครบ ${thaiNum(target)} รอบแล้ว · กด "ล้าง" เพื่อเริ่มนับใหม่`);
+    return;
+  }
+  const n = had + 1;
+  c[current] = n; store.set('counter', counter);
+  try { navigator.vibrate && navigator.vibrate(12); } catch {}
+  const fab = $('counter'); fab.classList.remove('pop'); void fab.offsetWidth; fab.classList.add('pop');
+  if (target && n === target) logChants([current]);
+  else if (target && n < target) jumpToRound(n + 1);
+  renderCounter();
+});
+// the counter holds rounds finished; the header shows the round being read (finished + 1)
+function syncCounter(done) {
+  const c = counts();
+  if ((c[current] || 0) >= done) return;
+  c[current] = done; store.set('counter', counter); renderCounter();
+}
+function jumpToRound(k) {
+  const m = markers.find(x => +x.dataset.n === k && x.dataset.of !== '1');
+  if (!m) return;
+  window.scrollTo(0, m.getBoundingClientRect().top + window.scrollY - window.innerHeight * READ_AT + 4);
+  pos = window.scrollY; lastSet = pos; updateRound(); if (playing) karaoke();
+}
+$('counterReset').addEventListener('click', () => {
+  const r = $('counterReset');
+  if (!resetTimer) { r.classList.add('armed'); r.textContent = 'แตะอีกครั้งเพื่อล้าง'; resetTimer = setTimeout(disarmReset, 3000); return; }
+  disarmReset();
+  delete counts()[current]; store.set('counter', counter);
+  renderCounter(); toast('ล้างตัวนับแล้ว');
+});
+
+renderTabs(); renderReader(); applySize(); applySpeed(); applyKaraoke(); updateProgress();
+initJournal();
+renderCounter();
+
+// ---- PWA: offline + install ----
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(() => {}));
+}
+let installEvt = null;
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault(); installEvt = e;
+  $('install').hidden = false; $('hint').hidden = true;
+});
+$('install').addEventListener('click', async () => {
+  if (!installEvt) return;
+  installEvt.prompt();
+  try { await installEvt.userChoice; } catch {}
+  installEvt = null; $('install').hidden = true; $('hint').hidden = false;
+});
+window.addEventListener('appinstalled', () => { $('install').hidden = true; $('hint').hidden = false; toast('ติดตั้งแล้ว เปิดได้จากหน้าจอโฮม'); });
+</script>
+</body>
+</html>
